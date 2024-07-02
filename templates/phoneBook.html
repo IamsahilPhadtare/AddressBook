@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phone Book</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+                /* Adjust the dropdown styling */
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px; 
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left; 
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .button1 {
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+    </style>
+</head>
+<body>
+    <a href="/">Log Out</a>
+    <div class="container">
+        {% if contactList|length %}
+            <form action="/submitoptions" method="POST">
+                <select name="options">
+                    <option value="add">ADD CONTACT</option>
+                    <option value="drop">DROP CONTACT</option>
+                </select>
+                <input type="submit" value="Submit">
+            </form>
+        {% endif %}
+        {% if ((contactList|length==0) or (option == 'add')) %}
+            <form action="/addData" method="POST">
+                <input type="text" name="contact" placeholder="Enter Contact Number" required><br>
+                <input type="text" name="name" placeholder="Enter Name" required><br>
+                <input type="text" name="email" placeholder="Enter Email-ID" required><br>
+                <textarea name="address" placeholder="Enter Address" rows="4" required></textarea><br>
+                <input type="submit" value="Submit">
+                
+            </form>
+        {% elif option == 'drop' %}
+            <form action="/dropData" method="POST">
+                <input type="text" name="contact" placeholder="Enter Contact Number to Drop" required><br>
+                <input type="submit" value="Submit">
+            </form>
+        {% endif %}
+    </div>
+    
+    <div class="container">
+        {% if contactList|length %}
+            <table>
+                <tr>
+                    <th>CONTACT NUMBER</th>
+                    <th>NAME</th>
+                    <th>EMAIL</th>
+                    <th>ADDRESS</th>
+                </tr>
+                {% for i in range(contactList|length) %}
+                    <tr>
+                        <td>{{ contactList[i] }}</td>
+                        <td>{{ nameList[i] }}</td>
+                        <td>{{ emailList[i] }}</td>
+                        <td>{{ addressList[i] | replace('\n', '<br>') }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <h1>No details found</h1>
+        {% endif %}
+    </div>
+</body>
+</html>
